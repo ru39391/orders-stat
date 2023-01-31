@@ -1,0 +1,1 @@
+export const apiUrl = 'http://o-batat.local/data';
