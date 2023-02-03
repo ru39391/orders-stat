@@ -1,16 +1,31 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-function DataTableRow() {
+function DataTableRow({
+  product,
+  id,
+  name,
+  counter,
+  count,
+  cost,
+  weight,
+  orders,
+}) {
   return (
-    <Row>
-      <Col md={3} className="data-table__cell">
-        <a className="data-table__link" href="#">Томаты черри</a>
-      </Col>
-      <Col md={3} className="data-table__cell">2</Col>
-      <Col md={3} className="data-table__cell">300</Col>
-      <Col md={3} className="data-table__cell">8</Col>
-    </Row>
+    <>
+      <Row>
+        <Col className="data-table__cell">
+          <a className="data-table__link" href={`manager/?a=resource/update&id=${id}`}>{name}</a>
+        </Col>
+        <Col className="data-table__cell">{counter}</Col>
+        <Col className="data-table__cell">{count}</Col>
+        <Col className="data-table__cell">{cost}</Col>
+        <Col className="data-table__cell"></Col>
+      </Row>
+      <Row>
+        <Col className="data-table__cell"></Col>
+      </Row>
+    </>
   );
 }
 

@@ -1,19 +1,34 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import DataTableBody from '../DataTableBody/DataTableBody';
+import DataTableRow from '../DataTableRow/DataTableRow';
 
-function DataTable({data}) {
+function DataTable({ products }) {
   return (
     <div className="data-table">
       <div className="data-table__header">
         <Row>
-          <Col md={3} className="data-table__caption">Товар</Col>
-          <Col md={3} className="data-table__caption">Количество, шт.</Col>
-          <Col md={3} className="data-table__caption">Сумма, руб.</Col>
-          <Col md={3} className="data-table__caption">Остатки, шт.</Col>
+          <Col className="data-table__caption">Товар</Col>
+          <Col className="data-table__caption">Частота заказов</Col>
+          <Col className="data-table__caption">Количество, шт.</Col>
+          <Col className="data-table__caption">Сумма, руб.</Col>
+          <Col className="data-table__caption">Остатки, шт.</Col>
         </Row>
       </div>
-      <DataTableBody />
+      <div className="data-table__body">
+        {products.map((productsItem) => (
+          <DataTableRow
+            product={productsItem}
+            key={productsItem.product_id}
+            id={productsItem.product_id}
+            name={productsItem.name}
+            counter={productsItem.counter}
+            count={productsItem.count}
+            cost={productsItem.cost}
+            weight={productsItem.weight}
+            orders={productsItem.orders}
+          />
+        ))}
+      </div>
     </div>
   );
 }

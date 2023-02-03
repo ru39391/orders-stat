@@ -22,7 +22,7 @@ class Api extends React.Component {
   }
 
   getInitialData() {
-    return fetch(`${this._baseUrl}/orders/`, {
+    return fetch(`${this._baseUrl}/orders`, {
       method: 'GET',
       headers: this._setHeaders()
     })
