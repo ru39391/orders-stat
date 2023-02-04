@@ -1,8 +1,9 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
-import Sidebar from '../Sidebar/Sidebar';
-import Main from '../Main/Main';
 import api from '../../utils/api';
+import { sortArr } from '../../utils/constants';
+import Main from '../Main/Main';
+import Sidebar from '../Sidebar/Sidebar';
 import './App.scss';
 
 function App() {
@@ -10,27 +11,6 @@ function App() {
 
   function calcArrSumm(arr) {
     return arr.reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-  }
-
-  function sortArr(arr, key = '') {
-    const sortedArr = arr.map((item, index) => {
-      return {
-        'index': index,
-        'value': Boolean(key) ? item[key] : item
-      };
-    });
-
-    sortedArr.sort((a, b) => {
-      if (a.value > b.value) {
-        return 1;
-      }
-      if (a.value < b.value) {
-        return -1;
-      }
-      return 0;
-    });
-
-    return sortedArr.map(item => arr[item.index]);
   }
 
   function handleProductsList(data) {
@@ -49,6 +29,8 @@ function App() {
         'count': calcArrSumm(currProductsArr.map(product => product.count)),
         'cost': calcArrSumm(currProductsArr.map(product => product.cost)),
         'weight': calcArrSumm(currProductsArr.map(product => product.weight)),
+        'remains': item.remains,
+        'image': item.image,
       };
     });
 
@@ -72,8 +54,8 @@ function App() {
     });
   }, []);
 
-  return (  
-    <Container fluid className="d-flex">
+  return (
+    <Container fluid className="d-flex py-4">
       <Sidebar />
       <Main products={Products} />
     </Container>
