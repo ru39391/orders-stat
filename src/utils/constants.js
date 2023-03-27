@@ -8,7 +8,7 @@ const COL_TITLES = {
   REMAINS: 'Остатки, шт.',
 };
 
-const ERROR_MSG = 'Ошибка при получении данных заказов';
+const ERROR_MSG = 'Ошибка при получении списка заказов';
 
 export {
   DEFAULT_DOC_TITLE,

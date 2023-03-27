@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
+
 import { shallow } from 'zustand/shallow';
 import useOrderList from '../store/OrderListStore';
+import AlertError from './AlertError';
+import { LinearProgress } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { DEFAULT_DOC_TITLE } from '../utils/constants';
@@ -25,10 +28,14 @@ function App() {
   const {
     orders,
     products,
+    isLoading,
+    error,
   } = useOrderList(
     (state) => ({
       orders: state.orders,
       products: state.products,
+      isLoading: state.isLoading,
+      error: state.error,
     }),
     shallow
   );
@@ -45,7 +52,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      111
+      {isLoading && <LinearProgress />}
+      {error && <AlertError errorMsg={error} />}
     </ThemeProvider>
   )
 };
