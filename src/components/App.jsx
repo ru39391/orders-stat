@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 
 import { shallow } from 'zustand/shallow';
 import useOrderList from '../store/OrderListStore';
+import useDataTable from '../store/DataTableStore';
 import AlertError from './AlertError';
-import { LinearProgress } from '@mui/material';
+import DataTable from './DataTable';
+import { Box, LinearProgress } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { DEFAULT_DOC_TITLE } from '../utils/constants';
@@ -40,9 +42,25 @@ function App() {
     shallow
   );
 
+  const {
+    tableCols,
+    tableRows,
+    tableRowData,
+    renderRows,
+    getRowData,
+  } = useDataTable(
+    (state) => ({
+      tableCols: state.tableCols,
+      tableRows: state.tableRows,
+      tableRowData: state.tableRowData,
+      renderRows: state.renderRows,
+      getRowData: state.getRowData,
+    }),
+    shallow
+  );
+
   useEffect(() => {
-    console.log(orders);
-    console.log(products);
+    renderRows(products);
   }, [orders, products]);
 
   useEffect(() => {
@@ -52,6 +70,21 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+        }}
+      >
+        <DataTable
+          src={orders}
+          tableCols={tableCols}
+          tableRows={tableRows}
+          rowData={tableRowData}
+          getRowData={getRowData}
+        />
+      </Box>
       {isLoading && <LinearProgress />}
       {error && <AlertError errorMsg={error} />}
     </ThemeProvider>
