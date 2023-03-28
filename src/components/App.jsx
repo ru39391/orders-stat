@@ -5,6 +5,7 @@ import useOrderList from '../store/OrderListStore';
 import useDataTable from '../store/DataTableStore';
 import AlertError from './AlertError';
 import DataTable from './DataTable';
+import DataTableProduct from './DataTableProduct';
 import { Box, LinearProgress } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -47,6 +48,7 @@ function App() {
     tableRows,
     tableRowData,
     renderRows,
+    renderCell,
     getRowData,
   } = useDataTable(
     (state) => ({
@@ -54,6 +56,7 @@ function App() {
       tableRows: state.tableRows,
       tableRowData: state.tableRowData,
       renderRows: state.renderRows,
+      renderCell: state.renderCell,
       getRowData: state.getRowData,
     }),
     shallow
@@ -61,7 +64,8 @@ function App() {
 
   useEffect(() => {
     renderRows(products);
-  }, [orders, products]);
+    renderCell(DataTableProduct);
+  }, [products]);
 
   useEffect(() => {
     document.title = DEFAULT_DOC_TITLE;
