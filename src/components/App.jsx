@@ -6,10 +6,21 @@ import useDataTable from '../store/DataTableStore';
 import AlertError from './AlertError';
 import DataTable from './DataTable';
 import DataTableProduct from './DataTableProduct';
+import DataTableActions from './DataTableActions';
+import {
+  ModeEdit,
+  Visibility,
+  AssignmentTurnedIn,
+} from '@mui/icons-material';
 import { Box, LinearProgress } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { DEFAULT_DOC_TITLE } from '../utils/constants';
+import {
+  DEFAULT_DOC_TITLE,
+  ORDERS_ACTION_LABEL,
+  VIEW_ACTION_LABEL,
+  EDIT_ACTION_LABEL,
+} from '../utils/constants';
 import '@fontsource/roboto/400.css';
 
 function App() {
@@ -48,23 +59,45 @@ function App() {
     tableRows,
     tableRowData,
     renderRows,
-    renderCell,
-    getRowData,
+    setCellHandler,
+    setActionHandler,
+    setRowActions,
   } = useDataTable(
     (state) => ({
       tableCols: state.tableCols,
       tableRows: state.tableRows,
       tableRowData: state.tableRowData,
       renderRows: state.renderRows,
-      renderCell: state.renderCell,
-      getRowData: state.getRowData,
+      setCellHandler: state.setCellHandler,
+      setActionHandler: state.setActionHandler,
+      setRowActions: state.setRowActions,
     }),
     shallow
   );
 
   useEffect(() => {
     renderRows(products);
-    renderCell(DataTableProduct);
+    setCellHandler(DataTableProduct);
+    setActionHandler(DataTableActions);
+    setRowActions([{
+      icon: <AssignmentTurnedIn />,
+      label: ORDERS_ACTION_LABEL,
+      handleAction: ({ orders }) => {
+        console.log(orders);
+      }
+    },{
+      icon: <Visibility />,
+      label: VIEW_ACTION_LABEL,
+      handleAction: ({ product_id }) => {
+        console.log(product_id);
+      }
+    },{
+      icon: <ModeEdit />,
+      label: EDIT_ACTION_LABEL,
+      handleAction: ({ product_id }) => {
+        console.log(product_id);
+      }
+    }]);
   }, [products]);
 
   useEffect(() => {
@@ -86,7 +119,6 @@ function App() {
           tableCols={tableCols}
           tableRows={tableRows}
           rowData={tableRowData}
-          getRowData={getRowData}
         />
       </Box>
       {isLoading && <LinearProgress />}

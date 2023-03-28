@@ -8,7 +8,18 @@ function DataTableProduct({ image, name }) {
         alignItems: 'center',
       }}
     >
-      <img src={image} alt={name} />
+      <Box
+        sx={{
+          width: 48,
+          height: 48,
+          marginRight: 3,
+          borderRadius: '50%',
+          objectFit: 'cover',
+        }}
+        component="img"
+        src={image}
+        alt={name}
+      />
       {name}
     </Box>
   );

@@ -13,28 +13,36 @@ import { COL_TITLES } from '../utils/constants';
 const useDataTable = create(devtools((set, get) => ({
   tableCols: [],
   tableRows: [],
-  tableRowData: {},
-  handleRows: null,
-  renderCell: (handler) => get().handleRows = handler,
+  cellHandler: null,
+  actionHandler: null,
+  rowActions: [],
+  setCellHandler: (handler) => get().cellHandler = handler,
+  setActionHandler: (handler) => get().actionHandler = handler,
+  setRowActions: (arr) => get().rowActions = arr,
   setCols: () => {
-    const columnsArr = Object.values(COL_TITLES).map(
-      (item, index) => ({
-        field: `col${index + 1}`,
+    const columnsArr = Object.values(COL_TITLES).map((item, index) => {
+      const key = Object.keys(COL_TITLES)[index].toLowerCase();
+      return {
+        field: key,
         headerName: item,
         flex: item.length > 4 ? 1 : 0,
         width: item.length > 4 ? 'auto' : 100,
-        renderCell: ({ row }) => {
-          const key = Object.keys(COL_TITLES)[index].toLowerCase();
-          return key === NAME_KEY ? get().handleRows(row) : row[key];
-        }
-      })
-    );
+        renderCell: ({ row }) => key === NAME_KEY ? get().cellHandler(row) : row[key]
+      }
+    });
 
     columnsArr.unshift({
       field: ID_KEY,
       hide: true,
     });
 
+    columnsArr.push({
+      field: 'actions',
+      type: 'actions',
+      width: 100,
+      getActions: ({ row }) => get().rowActions.map(data => get().actionHandler({ ...data, ...row })),
+    });
+    console.log(get().rowActions[0]);
     return columnsArr;
   },
   setData: (arr = get().tableRows) => {
@@ -51,18 +59,18 @@ const useDataTable = create(devtools((set, get) => ({
       remains,
       image
     }, _, array) => {
-      const currProductsArr = array.filter(product => product.product_id === product_id);
-      const productOrdersArr = currProductsArr.map(product => product.order_id);
+      const productsArr = array.filter(product => product.product_id === product_id);
+      const productOrdersArr = productsArr.map(product => product.order_id);
 
       return {
         product_id,
         image: `${SITE_URL}${image}`,
         name,
-        counter: currProductsArr.length,
-        count: getArrSumm(currProductsArr, COUNT_KEY),
-        cost: getArrSumm(currProductsArr, COST_KEY),
+        counter: productsArr.length,
+        count: getArrSumm(productsArr, COUNT_KEY),
+        cost: getArrSumm(productsArr, COST_KEY),
         remains,
-        weight: getArrSumm(currProductsArr, WEIGHT_KEY),
+        weight: getArrSumm(productsArr, WEIGHT_KEY),
         orders: productOrdersArr,
       };
     });
@@ -78,9 +86,6 @@ const useDataTable = create(devtools((set, get) => ({
         ...item
       })
     ));
-  },
-  getRowData: ({ row }) => {
-    console.log(row);
   },
 })));
 
