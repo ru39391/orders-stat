@@ -7,21 +7,23 @@ import {
   COUNT_KEY,
   COST_KEY,
   WEIGHT_KEY,
+  RES_EDIT_PATH,
 } from '../utils/config';
 import { COL_TITLES } from '../utils/constants';
 
 const useDataTable = create(devtools((set, get) => ({
   tableCols: [],
   tableRows: [],
+  tableRowData: [],
   cellHandler: null,
   actionHandler: null,
   rowActions: [],
-  setCellHandler: (handler) => get().cellHandler = handler,
-  setActionHandler: (handler) => get().actionHandler = handler,
-  setRowActions: (arr) => get().rowActions = arr,
-  setCols: () => {
-    const columnsArr = Object.values(COL_TITLES).map((item, index) => {
-      const key = Object.keys(COL_TITLES)[index].toLowerCase();
+  setCellHandler: (handler) => set({ cellHandler: handler }),
+  setActionHandler: (handler) => set({ actionHandler: handler }),
+  setRowActions: (arr) => set({ rowActions: arr }),
+  setCols: (arr = COL_TITLES) => {
+    const columnsArr = Object.values(arr).map((item, index) => {
+      const key = Object.keys(arr)[index].toLowerCase();
       return {
         field: key,
         headerName: item,
@@ -40,24 +42,25 @@ const useDataTable = create(devtools((set, get) => ({
       field: 'actions',
       type: 'actions',
       width: 100,
-      getActions: ({ row }) => get().rowActions.map(data => get().actionHandler({ ...data, ...row })),
+      getActions: ({ row }) => get().rowActions.map(props => get().actionHandler({ ...props, ...row })),
     });
-    console.log(get().rowActions[0]);
+
     return columnsArr;
   },
-  setData: (arr = get().tableRows) => {
-    set({
+  setData: (arr = get().tableRows) => set(
+    {
       tableCols: arr.length ? get().setCols() : get().tableCols,
       tableRows: arr,
-    })
-  },
+    }
+  ),
   renderRows: (arr) => {
     const getArrSumm = (array, key) => array.map(item => item[key]).reduce((previousValue, currentValue) => previousValue + currentValue, 0);
     const handledArr = arr.map(({
       product_id,
       name,
       remains,
-      image
+      image,
+      url
     }, _, array) => {
       const productsArr = array.filter(product => product.product_id === product_id);
       const productOrdersArr = productsArr.map(product => product.order_id);
@@ -72,6 +75,8 @@ const useDataTable = create(devtools((set, get) => ({
         remains,
         weight: getArrSumm(productsArr, WEIGHT_KEY),
         orders: productOrdersArr,
+        url: `${SITE_URL}${url}`,
+        url_edit: `${SITE_URL}${RES_EDIT_PATH}${product_id}`,
       };
     });
 
@@ -87,6 +92,7 @@ const useDataTable = create(devtools((set, get) => ({
       })
     ));
   },
+  setRowData: (arr) => set({ tableRowData: arr }),
 })));
 
 export default useDataTable;

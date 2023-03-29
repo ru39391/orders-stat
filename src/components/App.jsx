@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-
 import { shallow } from 'zustand/shallow';
 import useOrderList from '../store/OrderListStore';
 import useDataTable from '../store/DataTableStore';
@@ -7,14 +6,14 @@ import AlertError from './AlertError';
 import DataTable from './DataTable';
 import DataTableProduct from './DataTableProduct';
 import DataTableActions from './DataTableActions';
+import { Box, LinearProgress } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {
   ModeEdit,
   Visibility,
   AssignmentTurnedIn,
 } from '@mui/icons-material';
-import { Box, LinearProgress } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {
   DEFAULT_DOC_TITLE,
   ORDERS_ACTION_LABEL,
@@ -62,6 +61,7 @@ function App() {
     setCellHandler,
     setActionHandler,
     setRowActions,
+    setRowData,
   } = useDataTable(
     (state) => ({
       tableCols: state.tableCols,
@@ -71,6 +71,7 @@ function App() {
       setCellHandler: state.setCellHandler,
       setActionHandler: state.setActionHandler,
       setRowActions: state.setRowActions,
+      setRowData: state.setRowData,
     }),
     shallow
   );
@@ -82,21 +83,15 @@ function App() {
     setRowActions([{
       icon: <AssignmentTurnedIn />,
       label: ORDERS_ACTION_LABEL,
-      handleAction: ({ orders }) => {
-        console.log(orders);
-      }
+      handleAction: ({ orders }) => setRowData(orders),
     },{
       icon: <Visibility />,
       label: VIEW_ACTION_LABEL,
-      handleAction: ({ product_id }) => {
-        console.log(product_id);
-      }
+      handleAction: ({ url }) => window.open(url, '_blank'),
     },{
       icon: <ModeEdit />,
       label: EDIT_ACTION_LABEL,
-      handleAction: ({ product_id }) => {
-        console.log(product_id);
-      }
+      handleAction: ({ url_edit }) => window.open(url_edit, '_blank'),
     }]);
   }, [products]);
 

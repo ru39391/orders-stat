@@ -9,6 +9,7 @@ const WEIGHT_KEY = 'weight';
 
 const ORDERS_PATH = 'orders';
 const PRODUCTS_PATH = 'products';
+const RES_EDIT_PATH = 'manager/?a=resource/update&id=';
 
 export {
   API_URL,
@@ -20,4 +21,5 @@ export {
   WEIGHT_KEY,
   ORDERS_PATH,
   PRODUCTS_PATH,
+  RES_EDIT_PATH,
 };

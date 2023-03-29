@@ -1,11 +1,11 @@
 import { GridActionsCellItem } from '@mui/x-data-grid';
 
-function DataTableActions({ icon, label, handleAction, product_id, orders }) {
+function DataTableActions({ icon, label, handleAction, orders, url, url_edit }) {
   return (
     <GridActionsCellItem
       icon={icon}
       label={label}
-      onClick={() => handleAction({ product_id, orders })}
+      onClick={() => handleAction({ orders, url, url_edit })}
     />
   );
 };

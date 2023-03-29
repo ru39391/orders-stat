@@ -3,6 +3,7 @@ import NoRowsOverlay from './NoRowsOverlay';
 import { DataGrid } from '@mui/x-data-grid';
 
 function DataTable({ src, tableCols, tableRows, rowData }) {
+  console.log(src.filter(({ id }) => rowData.includes(id)));
   return (
     <>
       <DataGrid
@@ -17,7 +18,7 @@ function DataTable({ src, tableCols, tableRows, rowData }) {
         slots={{ noRowsOverlay: NoRowsOverlay }}
       />
       {/*
-      <Popup labels={tableCols} data={rowData} closePopup={getRowData} />
+      <Popup labels={tableCols} orders={src.filter(({ id }) => rowData.includes(id))} closePopup={getRowData} />
       */}
     </>
   )
