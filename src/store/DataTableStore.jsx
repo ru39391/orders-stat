@@ -67,7 +67,7 @@ const useDataTable = create(devtools((set, get) => ({
 
       return {
         product_id,
-        image: `${SITE_URL}${image}`,
+        image,
         name,
         counter: productsArr.length,
         count: getArrSumm(productsArr, COUNT_KEY),

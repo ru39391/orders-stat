@@ -1,7 +1,11 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware'
 import api from '../utils/Api';
-import { ORDERS_PATH, PRODUCTS_PATH } from '../utils/config';
+import {
+  SITE_URL,
+  ORDERS_PATH,
+  PRODUCTS_PATH,
+} from '../utils/config';
 import { ERROR_MSG } from '../utils/constants';
 
 const useOrderList = create(devtools((set, get) => ({
@@ -9,13 +13,14 @@ const useOrderList = create(devtools((set, get) => ({
   products: [],
   isLoading: true,
   error: null,
+  handleProducts: (productsArr) => productsArr.map(product => ({ ...product, image: `${SITE_URL}${product.image}` })),
   handleOrders: (ordersArr, productsArr) => ordersArr.map(order => ({ ...order, products: productsArr.filter(({ order_id }) => order_id === order.id).map(({ product_id }) => product_id) })),
   fetchOrderList: Promise.all([ORDERS_PATH, PRODUCTS_PATH].map(item => api.fetchData(item)))
     .then(([...res]) => {
       const [orders, products] = res.map(({ data }) => data);
       set({
         orders: get().handleOrders(orders, products),
-        products,
+        products: get().handleProducts(products),
         isLoading: false,
         error: null,
       })

@@ -19,23 +19,31 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function Popup({ products, orders, closePopup }) {
-  const isOpen = Boolean(orders.length);
+function Popup({ productsList, ordersList, currOrders, handlePopup }) {
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (e, value) => {
     setTabValue(value);
   };
 
+  const isOpen = Boolean(currOrders.length);
+  const ordersData = ordersList.filter(({ id }) => currOrders.includes(id)).reverse();
+  const productsData = ordersData.map(
+    ({ id, products }) => ({
+      order_id: id,
+      products: products.map(item => productsList.find(({ order_id, product_id }) => product_id === item && order_id === id)),
+    })
+  );
+
   useEffect(() => {
     setTabValue(0);
-  }, [orders.length]);
+  }, [currOrders.length]);
 
   return (
     <Dialog
       open={isOpen}
       maxWidth="sm"
       fullWidth={true}
-      onClose={() => closePopup()}
+      onClose={() => handlePopup()}
       TransitionComponent={Transition}
       keepMounted
     >
@@ -54,7 +62,7 @@ function Popup({ products, orders, closePopup }) {
               variant="scrollable"
               scrollButtons={true}
             >
-              {orders.map(
+              {ordersData.map(
                 ({ id, createdon, cost }) =>
                 <Tab
                   key={id}
@@ -63,7 +71,7 @@ function Popup({ products, orders, closePopup }) {
               )}
             </Tabs>
           </Box>
-          {orders.map(
+          {ordersData.map(
             ({ id, createdon, cost }, index) =>
             <Box
               key={id}
@@ -77,7 +85,7 @@ function Popup({ products, orders, closePopup }) {
         </>}
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => closePopup()}>Закрыть</Button>
+        <Button onClick={() => handlePopup()}>Закрыть</Button>
       </DialogActions>
     </Dialog>
   )

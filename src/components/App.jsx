@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import { shallow } from 'zustand/shallow';
+
 import useOrderList from '../store/OrderListStore';
 import useDataTable from '../store/DataTableStore';
-import AlertError from './AlertError';
+
+import Popup from './Popup';
 import DataTable from './DataTable';
+import AlertError from './AlertError';
 import DataTableProduct from './DataTableProduct';
 import DataTableActions from './DataTableActions';
+
 import { Box, LinearProgress } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -14,6 +18,7 @@ import {
   Visibility,
   AssignmentTurnedIn,
 } from '@mui/icons-material';
+
 import {
   DEFAULT_DOC_TITLE,
   ORDERS_ACTION_LABEL,
@@ -110,13 +115,16 @@ function App() {
         }}
       >
         <DataTable
-          src={orders}
           tableCols={tableCols}
           tableRows={tableRows}
-          rowData={tableRowData}
-          setRowData={setRowData}
         />
       </Box>
+      <Popup
+        ordersList={orders}
+        productsList={products}
+        currOrders={tableRowData}
+        handlePopup={setRowData}
+      />
       {isLoading && <LinearProgress />}
       {error && <AlertError errorMsg={error} />}
     </ThemeProvider>
