@@ -26,6 +26,7 @@ import {
   EDIT_ACTION_LABEL,
 } from '../utils/constants';
 import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/700.css';
 
 function App() {
   const theme = createTheme({

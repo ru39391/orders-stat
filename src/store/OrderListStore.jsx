@@ -13,8 +13,23 @@ const useOrderList = create(devtools((set, get) => ({
   products: [],
   isLoading: true,
   error: null,
+  handleDate: (value) => {
+    const handleDateValue = (str) => {
+      const arr = str.split(' ');
+      const date = arr[0].split('-').reverse().join('.');
+      return [date, arr[1]].join(' ');
+    };
+    return Boolean(value) ? handleDateValue(value) : value;
+  },
+  handleOrders: (ordersArr, productsArr) => ordersArr.map(
+    (order) => ({
+      ...order,
+      createdon: get().handleDate(order.createdon),
+      updatedon: get().handleDate(order.updatedon),
+      products: productsArr.filter(({ order_id }) => order_id === order.id).map(({ product_id }) => product_id),
+    })
+  ),
   handleProducts: (productsArr) => productsArr.map(product => ({ ...product, image: `${SITE_URL}${product.image}` })),
-  handleOrders: (ordersArr, productsArr) => ordersArr.map(order => ({ ...order, products: productsArr.filter(({ order_id }) => order_id === order.id).map(({ product_id }) => product_id) })),
   fetchOrderList: Promise.all([ORDERS_PATH, PRODUCTS_PATH].map(item => api.fetchData(item)))
     .then(([...res]) => {
       const [orders, products] = res.map(({ data }) => data);
