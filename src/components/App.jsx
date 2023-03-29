@@ -114,6 +114,7 @@ function App() {
           tableCols={tableCols}
           tableRows={tableRows}
           rowData={tableRowData}
+          setRowData={setRowData}
         />
       </Box>
       {isLoading && <LinearProgress />}

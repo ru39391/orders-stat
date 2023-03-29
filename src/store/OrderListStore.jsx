@@ -9,11 +9,12 @@ const useOrderList = create(devtools((set, get) => ({
   products: [],
   isLoading: true,
   error: null,
+  handleOrders: (ordersArr, productsArr) => ordersArr.map(order => ({ ...order, products: productsArr.filter(({ order_id }) => order_id === order.id).map(({ product_id }) => product_id) })),
   fetchOrderList: Promise.all([ORDERS_PATH, PRODUCTS_PATH].map(item => api.fetchData(item)))
     .then(([...res]) => {
       const [orders, products] = res.map(({ data }) => data);
       set({
-        orders,
+        orders: get().handleOrders(orders, products),
         products,
         isLoading: false,
         error: null,

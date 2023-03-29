@@ -92,7 +92,7 @@ const useDataTable = create(devtools((set, get) => ({
       })
     ));
   },
-  setRowData: (arr) => set({ tableRowData: arr }),
+  setRowData: (arr = []) => set({ tableRowData: arr }),
 })));
 
 export default useDataTable;
